@@ -41,3 +41,11 @@ classifier = tf.estimator.DNNClassifier(feature_columns = my_feature_columns,
 	hidden_units = [30,10],
 	#model must choose between three classes
 	n_classes = 3)
+
+#train the model we just created
+classifier.train(
+	input_fn = lambda: input_fn(train, train_y, training = True),
+	steps = 5000)
+
+eval_result = classifier.evaluate(input_fn = lambda: input_fn(test, test_y, training = False))
+print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
