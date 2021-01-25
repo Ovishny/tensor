@@ -1,3 +1,5 @@
+#quick use of hidden markov models in order to determine the weather for the week given information on cold and hot days
+
 import tensorflow_probability as tfp 
 import tensorflow as tf
 
@@ -13,7 +15,8 @@ model = tfd.HiddenMarkovModel(
 	num_steps = 7 #number of days we want to observe
 	)
 
+#finds mean of model
 mean = model.mean()
-
+#since model is a partially defined tensor, we need to create a new session in tensorflow to view the value
 with tf.compat.v1.Session() as sess:
 	print(mean.numpy())
