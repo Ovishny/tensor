@@ -23,3 +23,7 @@ model = keras.Sequential([
 	keras.layers.Dense(128, activation = 'relu'),#hidden layer
 	keras.layers.Dense(10, activation = 'softmax')#output layer
 	])
+#compile the neural network
+model.compile(optimizer = 'adam',
+	loss = 'sparse_categorical_crossentropy',
+	metrics = ['accuracy'])
