@@ -14,9 +14,21 @@ class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
 				'dog', 'frog', 'horse', 'ship', 'truck']
 
 #use to look at images in dataset--------------------------------
-IMG_INDEX = 1 #change this to look at different images
+# IMG_INDEX = 1 #change this to look at different images
 
-plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
-plt.xlabel(class_names[train_labels[IMG_INDEX][0]])
-plt.show()
+# plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
+# plt.xlabel(class_names[train_labels[IMG_INDEX][0]])
+# plt.show()
 #-----------------------------------------------------------------
+
+#cnn architecture. A stack of convolution 2D layers and Max Pooling 2D layers followed by a few densely connected layers
+model = models.Sequential()
+model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape = (32,32,3)))
+model.add(layers.MaxPooling2D((2,2)))
+model.add(layers.Conv2D(64,(3,3), activation = 'relu'))
+model.add(layers.MaxPooling2D((2,2)))
+model.add(layers.Conv2D(64,(3,3), activation = 'relu'))
+
+#view a summary of the model--------------------------
+print(model.summary())
+#-------------------------------------------------
