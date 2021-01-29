@@ -48,3 +48,22 @@ history = model.fit(train_images, train_labels, epochs = 10,
 #Evaluating the model
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose = 2)
 print(test_acc)
+
+#DATA AUGMENTATION(CREATING MULTIPLE AUGMENTS OF IMAGES IN THE DATA SET SO THE MODEL HAS MORE IMAGES TO WORK WITH, MAKING THE MODEL MORE ACCURATE)
+from keras.preprocessing import image
+from keras.preprocessing.image import ImageDataGenerator
+
+#creates a data generator object that transforms images
+datagen = ImageDataGenerator(
+	rotation_range = 40,
+	width_shift_range = 0.2,
+	height_shift_range = 0.2,
+	shear_range = 0.2,
+	zoom_range = 0.2,
+	horizontal_flip = True,
+	fill_mode = 'nearest')
+
+#pick an image to transform
+test_img = train_images[14]
+img = image.img_to_array(test_img)#convert image to numpy array
+img = img.reshape((1,) + img.shape)#reshape image
