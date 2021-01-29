@@ -67,3 +67,14 @@ datagen = ImageDataGenerator(
 test_img = train_images[14]
 img = image.img_to_array(test_img)#convert image to numpy array
 img = img.reshape((1,) + img.shape)#reshape image
+
+i = 0
+
+for batch in datagen.flow(img, save_prefix = 'test', save_format = 'jpeg'): #this loops runs forever until we break, saving images to current directory
+	plt.figure(i)
+	plot = plt.imshow(image.img_to_array(batch[0]))
+	i += 1
+	if i > 4: #show 4 images
+		break
+
+plt.show()
