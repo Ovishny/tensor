@@ -78,3 +78,4 @@ for batch in datagen.flow(img, save_prefix = 'test', save_format = 'jpeg'): #thi
 		break
 
 plt.show()
+

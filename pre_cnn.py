@@ -36,9 +36,25 @@ train = raw_train.map(format_example)
 validation = raw_validation.map(format_example)
 test = raw_test.map(format_example)
 
-#display 2 images from the dataset
-for image,label in raw_train.take(2):
-	plt.figure()
-	plt.imshow(image)
-	plt.title(get_label_name(label))
-plt.show()
+# #display 2 images from the dataset
+# for image,label in raw_train.take(2):
+# 	plt.figure()
+# 	plt.imshow(image)
+# 	plt.title(get_label_name(label))
+# plt.show()
+
+#picking a pretrained model
+IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
+
+#create base model from pretrained model MobileNet V2. This model is trained on millions of imagges and has 1000 diff classes
+#but we only want the convolution base of the model. We dont want to load the classification layer. We tell the model what input
+#shape to expect and to use predetermined weights from imagent(googles dataset)
+base_model = tf.keras.applications.MobileNetV2(input_shape = IMG_SHAPE,
+	include_top = False,
+	weights = 'imagenet')
+
+# #to check the shape of the model
+# for image, _ in train_batches.take(1):
+# 	pass
+# feature_batch = base_model(image)
+# print(feature_batch.shape)
