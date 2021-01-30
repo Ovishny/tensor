@@ -21,6 +21,21 @@ tfds.disable_progress_bar()
 
 get_label_name = metadata.features['label'].int2str #creates a function object that we can use to get labels
 
+
+
+IMG_SIZE = 160 #All images will be resized to 160x160
+
+#return image that is reshaped to IMG_SIZE
+def format_example(image, label):
+	image = tf.cast(image, tf.float32)
+	image = (image/127.5) - 1
+	image = tf.image.resize(image, (IMG_SIZE, IMG_SIZE))
+	return image, label
+
+train = raw_train.map(format_example)
+validation = raw_validation.map(format_example)
+test = raw_test.map(format_example)
+
 #display 2 images from the dataset
 for image,label in raw_train.take(2):
 	plt.figure()
