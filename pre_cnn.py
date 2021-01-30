@@ -41,3 +41,4 @@ for image,label in raw_train.take(2):
 	plt.figure()
 	plt.imshow(image)
 	plt.title(get_label_name(label))
+plt.show()
