@@ -81,24 +81,40 @@ model = tf.keras.Sequential([
 	prediction_layer
 ])
 
-#training the model
-base_learning_rate = 0.0001
-model.compile(optimizer = tf.keras.optimizers.RMSprop(lr = base_learning_rate),
-	loss = tf.keras.losses.BinaryCrossentropy(from_logits = True),
-	metrics = ['accuracy'])
+# #training the model
+# base_learning_rate = 0.0001
+# model.compile(optimizer = tf.keras.optimizers.RMSprop(lr = base_learning_rate),
+# 	loss = tf.keras.losses.BinaryCrossentropy(from_logits = True),
+# 	metrics = ['accuracy'])
 
-#evaluate the model
-initial_epochs = 3
-validation_steps = 20
-loss0,accuracy0 = model.evaluate(validation_batches, steps = validation_steps)
+# #evaluate the model
+# initial_epochs = 3
+# validation_steps = 20
+# loss0,accuracy0 = model.evaluate(validation_batches, steps = validation_steps)
 
-history = model.fit(train_batches, 
-	epochs = initial_epochs,
-	validation_data = validation_batches)
+# history = model.fit(train_batches, 
+# 	epochs = initial_epochs,
+# 	validation_data = validation_batches)
 
-acc = history.history['accuracy']
-print(acc)
+# acc = history.history['accuracy']
+# print(acc)
 
 #save model
-model.save("dogs_vs_cats.h5")
+model.save("dogs_vs_cats.h5")#h5 specific to save files in keras
 new_model = tf.keras.models.load_model('dogs_vs_cats.h5')
+
+def show_image(img,label,guess):
+	plt.figure()
+	plt.imshow(img, cmap = plt.cm.binary)
+	plt.title("Expected: " + label)
+	plt.xlabel("Guess: " + guess)
+	plt.colorbar()
+	plt.grid(False)
+	plt.show()
+
+for image, label in test.take(1):
+	class_names = ['cats', 'dogs']
+	predict = new_model.predict(np.array([image]))
+	class_name = (class_names[np.argmax(predict)])
+	show_image(image, get_label_name(label), class_name)
+
