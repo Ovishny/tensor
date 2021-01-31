@@ -112,9 +112,10 @@ def show_image(img,label,guess):
 	plt.grid(False)
 	plt.show()
 
-for image, label in test.take(1):
-	class_names = ['Cat', 'Dog']
+for image, label in test.take(5):
+	class_names = ['dog', 'cat']
 	predict = new_model.predict(np.array([image]))
+	print(predict)
 	class_name = (class_names[np.argmax(predict)])
 	show_image(image, get_label_name(label), class_name)
 
