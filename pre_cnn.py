@@ -43,6 +43,14 @@ test = raw_test.map(format_example)
 # 	plt.title(get_label_name(label))
 # plt.show()
 
+#shuffle and batch images
+BATCH_SIZE = 32
+SHUFFLE_BUFFER_SIZE = 1000
+
+train_batches = train.shuffle(SHUFFLE_BUFFER_SIZE).batch(BATCH_SIZE)
+validation_batches = validation.batch(BATCH_SIZE)
+test_batches = test.batch(BATCH_SIZE)
+
 #picking a pretrained model
 IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
 
@@ -72,3 +80,21 @@ model = tf.keras.Sequential([
 	global_average_layer,
 	prediction_layer
 ])
+
+#training the model
+base_learning_rate = 0.0001
+model.compile(optimizer = tf.keras.optimizers.RMSprop(lr = base_learning_rate),
+	loss = tf.keras.losses.BinaryCrossentropy(from_logits = True),
+	metrics = ['accuracy'])
+
+#evaluate the model
+initial_epochs = 3
+validation_steps = 20
+loss0,accuracy0 = model.evaluate(validation_batches, steps = validation_steps)
+
+history = model.fit(train_batches, 
+	epochs = initial_epochs,
+	validation_data = validation_batches)
+
+acc = history.history['accuracy']
+print(acc)
