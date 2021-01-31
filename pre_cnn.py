@@ -58,3 +58,10 @@ base_model = tf.keras.applications.MobileNetV2(input_shape = IMG_SHAPE,
 # 	pass
 # feature_batch = base_model(image)
 # print(feature_batch.shape)
+
+#freezing the base
+base_model.trainable = False #no longer train model
+
+#add classifier
+global_average_layer = tf.keras.layers.GlobalAveragePooling2D() #pooling layer
+prediction_layer = keras.layers.Dense(1) #prediction layer with single dense neuron
