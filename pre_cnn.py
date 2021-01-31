@@ -65,3 +65,10 @@ base_model.trainable = False #no longer train model
 #add classifier
 global_average_layer = tf.keras.layers.GlobalAveragePooling2D() #pooling layer
 prediction_layer = keras.layers.Dense(1) #prediction layer with single dense neuron
+
+#combine these layers with model
+model = tf.keras.Sequential([
+	base_model,
+	global_average_layer,
+	prediction_layer
+])
