@@ -27,7 +27,10 @@ model = tf.keras.Sequential([
 
 #train the model
 model.compile(loss = "binary_crossentropy",
-	optimize = 'rmsprop',
+	optimizer = 'rmsprop',
 	metrics = ['acc']
 )
-history = model.fit(train_Data, train_labels, epochs = 10, validation_split = 0.2)
+history = model.fit(train_data, train_labels, epochs = 10, validation_split = 0.2)
+
+results = model.evaluate(test_data, test_labels)
+print(results)
