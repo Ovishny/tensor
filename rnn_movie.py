@@ -30,7 +30,7 @@ model.compile(loss = "binary_crossentropy",
 	optimizer = 'rmsprop',
 	metrics = ['acc']
 )
-history = model.fit(train_data, train_labels, epochs = 10, validation_split = 0.2)
+history = model.fit(train_data, train_labels, epochs = 4, validation_split = 0.2)
 
 #evaluate the model
 results = model.evaluate(test_data, test_labels)
@@ -64,14 +64,14 @@ print(decode_integers(encoded))
 #make a prediction
 
 def predict(text):
-	encoded_text = encode_text(text)
-	pred = np.zeros((1,250))
-	pred[0] = encoded_text
-	result = model.predict(pred)
-	print(result[0])
+	encoded_text = encode_text(text) #encode the text
+	pred = np.zeros((1,250)) #create numpy array
+	pred[0] = encoded_text #insert prediction
+	result = model.predict(pred) #predict result
+	print(result[0])#print result
 
-positive_review = "That movie was so awesome! I really loved it and would wait it again because it was amazingly great"
+positive_review = "I loved this movie. I highly recommend it."
 predict(positive_review)
 
-negative_review = "that movie sucked. I hated it and wouldn't watch it again. Was one of the worst things I've ever watched"
+negative_review = "This movie was garbage, do not watch it."
 predict(negative_review) 
