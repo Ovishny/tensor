@@ -76,3 +76,15 @@ RNN_UNITS = 1024
 
 BUFFER_SIZE = 10000 #buffer size to shuffle dataset. Tf data designed to work with infinite sequences. maintains a buffer in which to shuffle
 data = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE, drop_remainder = True)
+
+#building a model
+def build_model(vocab_size, embedding_dim, rnn_units, batch_size):
+	model = tf.keras.Sequential([
+		tf.keras.layers.Embedding(vocab_size, embedding_dim, batch_input_shape = [batch_size,None]),
+		tf.keras.layers.LSTM(rnn_units, return_sequences = True, stateful = True, recurrent_initializer = 'glorot_uniform'),
+		tf.keras.layers.Dense(vocab_size)
+	])
+	return model
+
+model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, BATCH_SIZE)
+model.summary()
