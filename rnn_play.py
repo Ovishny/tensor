@@ -97,3 +97,24 @@ def loss(labels, logits):
 model.compile(optimizer = 'adam', loss = loss)
 
 #creating checkpoints
+#directory for saved checkpoints
+checkpoint_dir = './training_checkpoints'
+#name of file
+checkpoint_prefix = os.path.join(checkpoint_dir,'ckpt_{epoch}')
+
+checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+	filepath = checkpoint_prefix,
+	save_Weights_only = True)
+
+#training the model
+history = model.fit(data, epochs = 4, callbacks = [checkpoint_callback])
+
+# loading the model
+model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
+
+model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+model.build(tf.TensorShape([1,None]))
+
+checkpoint_num = 10
+model.load_weights(tf.train.load_checkpoint("./training_checkpoints/ckpt_" + str(checkpoint_num)))
+model.build(tf.TensorShape([1,None]))
