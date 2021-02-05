@@ -138,3 +138,18 @@ def generate_text(model, start_string):
 	temperature = 1.0
 
 	#batch size 1 here
+	model.reset_states()
+	for i in range(num_generate):
+		predictions = model(input_eval)
+		#remove batch dimension
+		predictions = tf.squeeze(predictions, 0)
+
+		#using categorical distribution to predict character returned by model
+		predictions = predictions/temperature
+		predicted_id = tf.random,categorical(predictions, num_samples = 1)[-1,0].numpy()
+
+		#pass predicted character as next input along with previous hidden state
+		input_eval = tf.expand_dims([predicted_id], 0)
+
+		text_generated.append(idx2char[predicted_id])
+	return(start_string + ''.join(text_generated))
