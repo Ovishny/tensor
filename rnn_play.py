@@ -112,9 +112,29 @@ history = model.fit(data, epochs = 4, callbacks = [checkpoint_callback])
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
 
+#once model finished training we can find latest checkpoints that stores model weights
 model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
 model.build(tf.TensorShape([1,None]))
 
-checkpoint_num = 10
-model.load_weights(tf.train.load_checkpoint("./training_checkpoints/ckpt_" + str(checkpoint_num)))
-model.build(tf.TensorShape([1,None]))
+#load any checkpoint we want by specifyinf the exact file to load
+# checkpoint_num = 10
+# model.load_weights(tf.train.load_checkpoint("./training_checkpoints/ckpt_" + str(checkpoint_num)))
+# model.build(tf.TensorShape([1,None]))
+
+#generate text
+def generate_text(model, start_string):
+	#number of characters to generate
+	num_generate = 800
+
+	#converting start string to numbers
+	input_eval = [char2idx[s] for s in start_string]
+	input_eval = tf.expand_dims(input_eval, 0)
+
+	#empty string to store results
+	text_generated = []
+
+
+	#low temp in more predictable text, high more surprising
+	temperature = 1.0
+
+	#batch size 1 here
