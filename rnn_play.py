@@ -61,9 +61,18 @@ def split_input_target(chunk):
 #use map to apply above function to every entry
 dataset = sequences.map(split_input_target)
 
-for x,y in dataset.take(2):
-	print("\n\nEXAMPLE\n")
-	print("INPUT")
-	print(int_to_text(x))
-	print("\nOUTPUT")
-	print(int_to_text(y))
+# for x,y in dataset.take(2):
+# 	print("\n\nEXAMPLE\n")
+# 	print("INPUT")
+# 	print(int_to_text(x))
+# 	print("\nOUTPUT")
+# 	print(int_to_text(y))
+
+#make training batches
+BATCH_SIZE = 64
+VOCAB_SIZE = len(vocab) #vocab is number of unique characters
+EMBEDDING_DIM = 256
+RNN_UNITS = 1024
+
+BUFFER_SIZE = 10000 #buffer size to shuffle dataset. Tf data designed to work with infinite sequences. maintains a buffer in which to shuffle
+data = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE, drop_remainder = True)
