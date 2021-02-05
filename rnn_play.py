@@ -88,3 +88,12 @@ def build_model(vocab_size, embedding_dim, rnn_units, batch_size):
 
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, BATCH_SIZE)
 model.summary()
+
+#create loss function
+def loss(labels, logits):
+	return tf.keras.losses.sparse_categorical_crossentropy(labels,logits, from_logits=True)
+
+#compile model
+model.compile(optimizer = 'adam', loss = loss)
+
+#creating checkpoints
