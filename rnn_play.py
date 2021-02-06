@@ -1,7 +1,7 @@
 #recursive neural network to generate a play
 import tensorflow as tf 
-import keras
-from keras.preprocessing import sequence
+
+
 import os
 import numpy as np 
 
@@ -114,12 +114,14 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
 
 #once model finished training we can find latest checkpoints that stores model weights
+print(tf.train.latest_checkpoint(checkpoint_dir))
 model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+
 model.build(tf.TensorShape([1,None]))
 
 #load any checkpoint we want by specifyinf the exact file to load
 # checkpoint_num = 2
-# model.load_weights(tf.train.load_checkpoint("./training_checkpoints/ckpt_" + str(checkpoint_num)))
+# model.load_weights(tf.train.load_checkpoint("./training_checkpoints\\ckpt_" + str(checkpoint_num)))
 # model.build(tf.TensorShape([1,None]))
 
 #generate text
