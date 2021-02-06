@@ -107,7 +107,7 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 	save_Weights_only = True)
 
 #training the model
-history = model.fit(data, epochs = 4, callbacks = [checkpoint_callback])
+# history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
 
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
@@ -117,7 +117,7 @@ model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
 model.build(tf.TensorShape([1,None]))
 
 #load any checkpoint we want by specifyinf the exact file to load
-# checkpoint_num = 10
+# checkpoint_num = 2
 # model.load_weights(tf.train.load_checkpoint("./training_checkpoints/ckpt_" + str(checkpoint_num)))
 # model.build(tf.TensorShape([1,None]))
 
@@ -153,3 +153,6 @@ def generate_text(model, start_string):
 
 		text_generated.append(idx2char[predicted_id])
 	return(start_string + ''.join(text_generated))
+
+inp = input("Type a starting_string: ")
+print(generate_text(model, inp))
