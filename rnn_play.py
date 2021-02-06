@@ -107,7 +107,7 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 	save_weights_only = True)
 
 #training the model
-history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
+# history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
 
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
@@ -146,7 +146,7 @@ def generate_text(model, start_string):
 
 		#using categorical distribution to predict character returned by model
 		predictions = predictions/temperature
-		predicted_id = tf.random,categorical(predictions, num_samples = 1)[-1,0].numpy()
+		predicted_id = tf.random.categorical(predictions, num_samples = 1)[-1,0].numpy()
 
 		#pass predicted character as next input along with previous hidden state
 		input_eval = tf.expand_dims([predicted_id], 0)
