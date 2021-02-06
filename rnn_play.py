@@ -1,8 +1,7 @@
 #recursive neural network to generate a play
-
-from keras.preprocessing import sequence
-import keras
 import tensorflow as tf 
+import keras
+from keras.preprocessing import sequence
 import os
 import numpy as np 
 
@@ -108,6 +107,8 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 
 #training the model
 # history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
+# import gc
+# gc.collect()
 
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
