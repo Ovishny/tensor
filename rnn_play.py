@@ -104,10 +104,10 @@ checkpoint_prefix = os.path.join(checkpoint_dir,'ckpt_{epoch}')
 
 checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 	filepath = checkpoint_prefix,
-	save_Weights_only = True)
+	save_weights_only = True)
 
 #training the model
-# history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
+history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
 
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
