@@ -18,3 +18,10 @@ LEARNING_RATE = 0.81 #learning rate
 GAMMA = 0.96
 
 #pick an action
+epsilon = 0.9 #start with a 90% chance of picking a random action
+
+#code to pick action
+if np.random.uniform(0,1) < epsilon: #check if random selected value less than epsilon
+	action = env.action_space.sample()#take random action
+else:
+	action = np.argmax(Q[state, :])#use q table to pick best action on current values
