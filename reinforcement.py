@@ -38,7 +38,7 @@ for episode in range(EPISODES):
 		next_state, reward, done, _ = env.step(action)
 
 		#updating q values
-		Q[state, action] = Q[state, action] + LEARNING_RATE*(reward + GAMMA*np.max(Q[new_state, :]) - Q[state,action])
+		Q[state, action] = Q[state, action] + LEARNING_RATE*(reward + GAMMA*np.max(Q[next_state, :]) - Q[state,action])
 
 		state = next_state
 
@@ -51,5 +51,18 @@ print(Q)
 print(f"Average reward: {sum(rewards)/len(rewards)}:")
 #can see q values now
 
+#plot training progress 
+import matplotlib.pyplot as plt 
 
+def get_average(values):
+	return sum(values)/len(values)
+
+avg_rewards = []
+for i in range(0, len(rewards), 100):
+	avg_rewards.append(get_average(rewards[i:i+100]))
+
+plt.plot(avg_rewards)
+plt.ylabel('average rewards')
+plt.xlabel('episodes (100\'s)')
+plt.show()
 
