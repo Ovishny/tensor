@@ -105,10 +105,10 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 	filepath = checkpoint_prefix,
 	save_weights_only = True)
 
-#training the model
-# history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
-# import gc
-# gc.collect()
+# training the model
+history = model.fit(data, epochs = 2, callbacks = [checkpoint_callback])
+import gc
+gc.collect()
 
 # loading the model
 model = build_model(VOCAB_SIZE, EMBEDDING_DIM, RNN_UNITS, batch_size = 1)
