@@ -51,18 +51,18 @@ print(Q)
 print(f"Average reward: {sum(rewards)/len(rewards)}:")
 #can see q values now
 
-#plot training progress 
-import matplotlib.pyplot as plt 
+# #plot training progress 
+# import matplotlib.pyplot as plt 
 
-def get_average(values):
-	return sum(values)/len(values)
+# def get_average(values):
+# 	return sum(values)/len(values)
 
-avg_rewards = []
-for i in range(0, len(rewards), 100):
-	avg_rewards.append(get_average(rewards[i:i+100]))
+# avg_rewards = []
+# for i in range(0, len(rewards), 100):
+# 	avg_rewards.append(get_average(rewards[i:i+100]))
 
-plt.plot(avg_rewards)
-plt.ylabel('average rewards')
-plt.xlabel('episodes (100\'s)')
-plt.show()
+# plt.plot(avg_rewards)
+# plt.ylabel('average rewards')
+# plt.xlabel('episodes (100\'s)')
+# plt.show()
 
