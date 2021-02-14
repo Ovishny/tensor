@@ -134,8 +134,35 @@ tokenizer.index_word[0] = '<pad>'
 train_seqs = tokenizer.texts_to_sequences(train_captions)
 
 #pad each vector to max_length of captions. If not provided max length, pad sequences will calculate it automatically
-cap_vector = tf.keras.preprocessing.sequence.pad_sequence(train_seqs, padding = 'post')
+cap_vector = tf.keras.preprocessing.sequence.pad_sequences(train_seqs, padding = 'post')
 
 #calculate max_length, store the attention weights
 max_length = calc_max_length(train_seqs)
 
+#split data into training and testing
+img_to_cap_vector = collections.defaultdict(list)
+for img, cap in zip(img_name_vector, cap_vector):
+	img_to_cap_vector[img].append(cap)
+
+#create training and validation sets using an 80-20 split randomly
+img_keys = list(img_to_cap_vector.keys())
+random.shuffle(img_keys)
+
+slice_index = int(len(img_keys)*0.8)
+img_name_train_keys, img_name_val_keys = img_keys[:slice_index], img_keys[slice_index:]
+
+img_name_train = []
+cap_train = []
+for imgt in img_name_train_keys:
+	capt_len = len(img_to_cap_vector[imgt])
+	img_name_train.extend([imgt]*capt_len)
+	cap_train.extend(img_to_cap_vector[imgt])
+
+img_name_val = []
+cap_val = []
+for imgv in img_name_val_keys:
+	capv_len = len(img_to_cap_vector[imgv])
+	img_name_val.extend([imgv]*capv_len)
+	cap_val.extend(img_to_cap_vector[imgv])
+
+print(len(img_name_train), len(cap_train), len(img_name_val), len(cap_val))
