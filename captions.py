@@ -127,4 +127,15 @@ tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words = top_k,
 	filters ='!"#$%&()*+.,-/:;=?@[\]^_`{|}~ ' )
 
 tokenizer.fit_on_texts(train_captions)
+tokenizer.word_index['<pad>'] = 0
+tokenizer.index_word[0] = '<pad>'
+
+#create tokenized vectors
+train_seqs = tokenizer.texts_to_sequences(train_captions)
+
+#pad each vector to max_length of captions. If not provided max length, pad sequences will calculate it automatically
+cap_vector = tf.keras.preprocessing.sequence.pad_sequence(train_seqs, padding = 'post')
+
+#calculate max_length, store the attention weights
+max_length = calc_max_length(train_seqs)
 
