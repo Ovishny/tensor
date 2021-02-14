@@ -110,3 +110,21 @@ for img, path in image_dataset:
 		path_of_feature = p.numpy().decode('utf-8')
 		np.save(path_of_feature, bf.numpy())
 
+#preprocess and tokenize captions
+#tokenize captions splits on spaces giving vocab of unique words
+#limit vocab size to top 5000 words to save memory, eberything else becomes "UNK"
+#create word-to-index and index-to-word mapping
+#pad all sequences to be same length as longest one
+
+#find max length
+def calc_max_length(tensor):
+	return max(len(t) for t in tensor)
+
+#choose top 5000 words from vocab
+top_k = 5000
+tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words = top_k,
+	oov_token = '<unk>',
+	filters ='!"#$%&()*+.,-/:;=?@[\]^_`{|}~ ' )
+
+tokenizer.fit_on_texts(train_captions)
+
