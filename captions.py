@@ -22,6 +22,8 @@ import pickle
 
 #download caption annotation files
 annotation_folder = '/annotations/'
+
+
 if not os.path.exists(os.path.abspath('.') + annotation_folder):
 	annotation_zip = tf.keras.utils.get_file('captions.zip',
 		cache_subdir = os.path.abspath('.'),
@@ -29,7 +31,10 @@ if not os.path.exists(os.path.abspath('.') + annotation_folder):
 		extract = True)
 	annotation_file = os.path.dirname(annotation_zip) + '/annotations/captions_train2014.json'
 	os.remove(annotation_zip)
+else:
+	annotation_file = os.path.abspath('.') + annotation_folder
 
+print(annotation_file)
 #download image files
 image_folder = '/train2014/'
 if not os.path.exists(os.path.abspath('.') + image_folder):
@@ -41,6 +46,8 @@ if not os.path.exists(os.path.abspath('.') + image_folder):
 	os.remove(image_zip)
 else:
 	PATH = os.path.abspath('.') + image_folder
+
+print(PATH)
 
 #optional: limit size of training set. Gonna use 30000, using more would result in improved captioning quality
 with open(annotation_file, 'r') as f:
@@ -55,3 +62,13 @@ image_paths = list(image_path_to_caption.keys())
 random.shuffle(image_paths)
 #select first 6000 image_paths, each id has 5 captions, leading to 30,000 examples
 train_image_paths = image_paths[:6000]
+train_captions = []
+img_name_vector = []
+
+for image_path in train_image_paths:
+	caption_list = image_path_to_caption[image_path]
+	train_captions.extend(caption_list)
+	img_name_vector.extend([image_path] *len(caption_list))
+
+print(train_captions[0])
+Image.open(img_name_vector[0])
