@@ -51,3 +51,7 @@ for val in annotations['annotations']:
 	caption = f"<start> {val['caption']} <end>"
 	image_path = PATH + 'COCO_tain2014_' + '%012d.jpg' % (val['image_id'])
 	image_path_to_caption[image_path].append(caption)
+image_paths = list(image_path_to_caption.keys())
+random.shuffle(image_paths)
+#select first 6000 image_paths, each id has 5 captions, leading to 30,000 examples
+train_image_paths = image_paths[:6000]
