@@ -29,10 +29,10 @@ if not os.path.exists(os.path.abspath('.') + annotation_folder):
 		cache_subdir = os.path.abspath('.'),
 		origin = 'http://images.cocodataset.org/annotations/annotations_trainval2014.zip',
 		extract = True)
-	annotation_file = os.path.dirname(annotation_zip) + '/annotations/captions_train2014.json'
+	annotation_file = os.path.dirname(annotation_zip) + '\\annotations\\captions_train2014.json'
 	os.remove(annotation_zip)
 else:
-	annotation_file = os.path.abspath('.') + annotation_folder
+	annotation_file = os.path.abspath('.') + '/annotations/captions_train2014.json'
 
 print(annotation_file)
 #download image files
@@ -56,7 +56,7 @@ with open(annotation_file, 'r') as f:
 image_path_to_caption = collections.defaultdict(list)
 for val in annotations['annotations']:
 	caption = f"<start> {val['caption']} <end>"
-	image_path = PATH + 'COCO_tain2014_' + '%012d.jpg' % (val['image_id'])
+	image_path = PATH + 'COCO_train2014_' + '%012d.jpg' % (val['image_id'])
 	image_path_to_caption[image_path].append(caption)
 image_paths = list(image_path_to_caption.keys())
 random.shuffle(image_paths)
@@ -70,5 +70,16 @@ for image_path in train_image_paths:
 	train_captions.extend(caption_list)
 	img_name_vector.extend([image_path] *len(caption_list))
 
-print(train_captions[0])
-Image.open(img_name_vector[0])
+# #look at an example
+# print(train_captions[0])
+# im = Image.open(img_name_vector[0])
+# im.show()
+
+#preprocess image using inceptionv3, pretrained on imagenet
+#convert image to expected format, 299pxX299px, and preprocess image using preprocess_input to normalize image between values of -1 and 1
+def load_image(image_path):
+	img = tf.io.read_file(image_path)
+	img = tf.image.decode_jpeg(img, channels = 3)
+	img = tf.image.resize(img, (299, 299))
+	img = tf.keras.applications.inception_v3.preprocess_input(img)
+	return img, image_path
