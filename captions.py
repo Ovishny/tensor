@@ -41,3 +41,13 @@ if not os.path.exists(os.path.abspath('.') + image_folder):
 	os.remove(image_zip)
 else:
 	PATH = os.path.abspath('.') + image_folder
+
+#optional: limit size of training set. Gonna use 30000, using more would result in improved captioning quality
+with open(annotation_file, 'r') as f:
+	annotations = json.load(f)
+#group captions together with same id
+image_path_to_caption = collections.defaultdict(list)
+for val in annotations['annotations']:
+	caption = f"<start> {val['caption']} <end>"
+	image_path = PATH + 'COCO_tain2014_' + '%012d.jpg' % (val['image_id'])
+	image_path_to_caption[image_path].append(caption)
