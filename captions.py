@@ -165,4 +165,23 @@ for imgv in img_name_val_keys:
 	img_name_val.extend([imgv]*capv_len)
 	cap_val.extend(img_to_cap_vector[imgv])
 
-print(len(img_name_train), len(cap_train), len(img_name_val), len(cap_val))
+# print(len(img_name_train), len(cap_train), len(img_name_val), len(cap_val))
+
+#create tf.data dataset for training
+#Can change parameters based on system config
+BATCH_SIZE = 64
+BUFFER_SIZE = 1000
+embedding_dim = 256
+units = 512
+vocab_size = top_k + 1
+num_steps = len(img_name_train)//BATCH_SIZE
+#shape vector extracted is (64,2048) these two variables represent that
+feature_shape = 2048
+attention_features_shape = 64
+
+#load numpy files
+def map_func(img_name, cap):
+	img_tensor = np.load(img_name.decode('utf-8') + '.npy')
+	return img_tensor, cap
+
+dataset = tf.data.Dataset.from_tensor_slices((img_name_train, cap_train))
