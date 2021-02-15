@@ -185,3 +185,12 @@ def map_func(img_name, cap):
 	return img_tensor, cap
 
 dataset = tf.data.Dataset.from_tensor_slices((img_name_train, cap_train))
+
+#use map to load numpy files in parallel
+dataset = dataset.map(lambda item1, item2: tf.numpy_function(
+	map_func, [item1, item2], [tf.float32, tf.int32]),
+	num_parallel_calls = tf.data.AUTOTUNE)
+
+#shuffle and batch
+dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+dataset = dataset.prefetch(buffer_size = tf.data.AUTOTUNE)
