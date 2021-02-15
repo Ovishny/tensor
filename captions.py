@@ -194,3 +194,37 @@ dataset = dataset.map(lambda item1, item2: tf.numpy_function(
 #shuffle and batch
 dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 dataset = dataset.prefetch(buffer_size = tf.data.AUTOTUNE)
+
+#create model
+#extract features from lower convolutional layer, giving vector of (8,8,2048)
+#squash to shape (64,2048), then passed through cnn encoder
+#the rnn attends over image to predict the next word
+class BahdanauAttention(tf.keras.Model):
+	def __init__(self, units):
+		super(BahdanauAttention, self).__init__()
+		self.W1 = tf.keras.layers.Dense(units)
+		self.W2 - tf.keras.layers.Dense(units)
+		self.V = tf.keras.layers.Dense(1)
+
+	def call(self, features, hidden):
+		#features cnn encoder output shape == batch size, 64, embedding_dim
+		#hidden shape == batch_size, hidden_size
+		#hidden with time axis shape == batch_size, 1, hidden_size
+		hidden_with_time_axis = tf.expand_dims(hidden, 1)
+
+		#attention_hidden_layer shape = batch_size, 64 ,units
+		attention_hidden_layer = (tf.nn.tanh(self.W1(features)+
+			self.W2(hidden_with_time_axis)))
+
+		#score shape == batch_size, 64, 1
+		#this gives unnormalized score for each image feature
+		score = self.V(attention_hidden_layer)
+
+		#attention_weights shape = batch_size, 64, 1
+		attention_weights = tf.nn.softmax(score, axis = 1)
+
+		#context vector shape after sum == batch size, hidden size
+		context_vector = attention_weights*features
+		context_vector = tf.reduce_sum(context_vector, axis = 1)
+
+		return context_vector, attention_weights
