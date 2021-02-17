@@ -278,4 +278,22 @@ class RNN_Decoder(tf.keras.Model):
 		x = self.fc2(x)
 
 		return x, state, attention_weights
-		
+
+	def reset_state(self, batch_size):
+		return tf.zeros((batch_Size, self.units))
+
+encoder = CNN_Encoder(embedding_dim)
+decoder = RNN_Decoder(embedding_dim, units, vocab_size)
+
+optimizer = tf.keras.optimizers.Adam()
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
+	from_logits = True, reductions = 'none')
+
+def loss_function(real, pred):
+	mask = tf.math.logical_not(tf.math.equal(real, 0))
+	loss_ = loss_object(real, pred)
+
+	mask = tf.cast(mask, dtype= loss_.dtype)
+	loss_ *= mask
+
+	return tf.reduce_mean(loss_)
