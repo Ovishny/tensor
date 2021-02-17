@@ -228,3 +228,11 @@ class BahdanauAttention(tf.keras.Model):
 		context_vector = tf.reduce_sum(context_vector, axis = 1)
 
 		return context_vector, attention_weights
+
+class CNN_Encoder(tf.keras.Model):
+	#since extracted features already and dumped using pickle
+	#encoder passes feature through fully connected layer
+	def __init__(self, embedding_dim):
+		super(CNN_Encoder, self).__init__()
+		#shape after fc == batch_size, 64, embedding_dim
+		self.fc = tf.keras.layers.Dense(embedding_dim)
