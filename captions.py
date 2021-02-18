@@ -280,14 +280,14 @@ class RNN_Decoder(tf.keras.Model):
 		return x, state, attention_weights
 
 	def reset_state(self, batch_size):
-		return tf.zeros((batch_Size, self.units))
+		return tf.zeros((batch_size, self.units))
 
 encoder = CNN_Encoder(embedding_dim)
 decoder = RNN_Decoder(embedding_dim, units, vocab_size)
 
 optimizer = tf.keras.optimizers.Adam()
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
-	from_logits = True, reductions = 'none')
+	from_logits = True, reduction = 'none')
 
 def loss_function(real, pred):
 	mask = tf.math.logical_not(tf.math.equal(real, 0))
@@ -334,7 +334,7 @@ def train_step(img_tensor,target):
 	with tf.GradientTape() as tape:
 		features = encoder(img_tensor)
 
-		for i in range(i, target.shape[1]):
+		for i in range(1, target.shape[1]):
 			#pass features through decoder
 			predictions, hidden, _ = decoder(dec_input, features, hidden)
 
