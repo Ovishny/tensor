@@ -348,3 +348,25 @@ def train_step(img_tensor,target):
 	gradients = tape.gradient(loss, trainable_variables)
 	optimizer.apply_gradients(zip(gradients, trainable_variables))
 	return loss, total_loss
+
+EPOCHS = 20
+
+for epoch in range(start_epoch, EPOCHS):
+	start = time.time()
+	total_loss = 0
+
+	for(batch, (img_tensor, target)) in enumerate(dataset):
+		batch_loss, t_loss = train_step(img_tensor, target)
+		total_loss += t_loss
+
+		if batch % 100 == 0:
+			print('Epoch {} Batch {} Loss {:.4f'.format(
+				epoch + 1, batch, batch_loss.numpt()/int(target.shape[1])))
+	#storing epoch end loss value to plot
+	loss_plot.append(total_loss/num_steps)
+	if epoch % 5 == 0:
+		ckpt_manager.save()
+
+	print('Epoch {} Loss {:.6f}'.format(epoch + 1, total_loss/num_steps))
+	print('Time taken for 1 epoch {} sec\n'.format(time.time()-start))
+
