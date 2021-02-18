@@ -310,3 +310,17 @@ if ckpt_manager.latest_checkpoint:
 	start_epoch = int(ckpt_manager.latest_checkpoint.split('-')[-1])
 	#restore last checkpoint in checkpoint_path
 	ckpt.restore(ckpt_manager.latest_checkpoint)
+
+#time to train
+#extract features stored in respective npy files and pass features through encoder
+#encoder output, hidden state, and decoder input(start token) is passed to decoder
+#decoder returns predictions and decoder hidden state
+#decoder hidden state passed back into model and predictions used to calc loss
+#use teacher forcing to decide next input
+#teachr forcing technique where target word passed as next input to decodrr
+#calculate gradient and apply it to optimizer and backpropagate
+
+loss_plot = []
+
+@tf.function
+def train_step(img_tensor,target):
