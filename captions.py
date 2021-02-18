@@ -297,3 +297,16 @@ def loss_function(real, pred):
 	loss_ *= mask
 
 	return tf.reduce_mean(loss_)
+
+#creating checkpoints
+checkpoint_path = "./checkpoints/train"
+ckpt = tf.train.Checkpoint(encoder = encoder,
+	decoder = decoder,
+	optimizer = optimizer)
+ckpt_manager = tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep = 5)
+
+start_epoch = 0
+if ckpt_manager.latest_checkpoint:
+	start_epoch = int(ckpt_manager.latest_checkpoint.split('-')[-1])
+	#restore last checkpoint in checkpoint_path
+	ckpt.restore(ckpt_manager.latest_checkpoint)
