@@ -309,6 +309,7 @@ start_epoch = 0
 if ckpt_manager.latest_checkpoint:
 	start_epoch = int(ckpt_manager.latest_checkpoint.split('-')[-1])
 	#restore last checkpoint in checkpoint_path
+	print(ckpt_manager.latest_checkpoint)
 	ckpt.restore(ckpt_manager.latest_checkpoint)
 
 #time to train
@@ -322,53 +323,53 @@ if ckpt_manager.latest_checkpoint:
 
 loss_plot = []
 
-@tf.function
-def train_step(img_tensor,target):
-	loss = 0
+# @tf.function
+# def train_step(img_tensor,target):
+# 	loss = 0
 
-	#initialize hidden state for each batch
-	#captions not related from image to image
-	hidden = decoder.reset_state(batch_size = target.shape[0])
+# 	#initialize hidden state for each batch
+# 	#captions not related from image to image
+# 	hidden = decoder.reset_state(batch_size = target.shape[0])
 
-	dec_input = tf.expand_dims([tokenizer.word_index['<start>']]*target.shape[0], 1)
-	with tf.GradientTape() as tape:
-		features = encoder(img_tensor)
+# 	dec_input = tf.expand_dims([tokenizer.word_index['<start>']]*target.shape[0], 1)
+# 	with tf.GradientTape() as tape:
+# 		features = encoder(img_tensor)
 
-		for i in range(1, target.shape[1]):
-			#pass features through decoder
-			predictions, hidden, _ = decoder(dec_input, features, hidden)
+# 		for i in range(1, target.shape[1]):
+# 			#pass features through decoder
+# 			predictions, hidden, _ = decoder(dec_input, features, hidden)
 
-			loss += loss_function(target[:, i], predictions)
+# 			loss += loss_function(target[:, i], predictions)
 
-			#using teacher forcing
-			dec_input = tf.expand_dims(target[:, i], 1)
+# 			#using teacher forcing
+# 			dec_input = tf.expand_dims(target[:, i], 1)
 
-	total_loss = (loss/int(target.shape[1]))
-	trainable_variables = encoder.trainable_variables + decoder.trainable_variables
-	gradients = tape.gradient(loss, trainable_variables)
-	optimizer.apply_gradients(zip(gradients, trainable_variables))
-	return loss, total_loss
+# 	total_loss = (loss/int(target.shape[1]))
+# 	trainable_variables = encoder.trainable_variables + decoder.trainable_variables
+# 	gradients = tape.gradient(loss, trainable_variables)
+# 	optimizer.apply_gradients(zip(gradients, trainable_variables))
+# 	return loss, total_loss
 
-EPOCHS = 20
+# EPOCHS = 20
 
-for epoch in range(start_epoch, EPOCHS):
-	start = time.time()
-	total_loss = 0
+# for epoch in range(start_epoch, EPOCHS):
+# 	start = time.time()
+# 	total_loss = 0
 
-	for(batch, (img_tensor, target)) in enumerate(dataset):
-		batch_loss, t_loss = train_step(img_tensor, target)
-		total_loss += t_loss
+# 	for(batch, (img_tensor, target)) in enumerate(dataset):
+# 		batch_loss, t_loss = train_step(img_tensor, target)
+# 		total_loss += t_loss
 
-		if batch % 100 == 0:
-			print('Epoch {} Batch {} Loss {:.4f}'.format(
-				epoch + 1, batch, batch_loss.numpy()/int(target.shape[1])))
-	#storing epoch end loss value to plot
-	loss_plot.append(total_loss/num_steps)
-	if epoch % 5 == 0:
-		ckpt_manager.save()
+# 		if batch % 100 == 0:
+# 			print('Epoch {} Batch {} Loss {:.4f}'.format(
+# 				epoch + 1, batch, batch_loss.numpy()/int(target.shape[1])))
+# 	#storing epoch end loss value to plot
+# 	loss_plot.append(total_loss/num_steps)
+# 	if epoch % 5 == 0:
+# 		ckpt_manager.save()
 
-	print('Epoch {} Loss {:.6f}'.format(epoch + 1, total_loss/num_steps))
-	print('Time taken for 1 epoch {} sec\n'.format(time.time()-start))
+# 	print('Epoch {} Loss {:.6f}'.format(epoch + 1, total_loss/num_steps))
+# 	print('Time taken for 1 epoch {} sec\n'.format(time.time()-start))
 
 # #plot the lossfunction over epochs
 # plt.plot(loss_plot)
@@ -388,7 +389,7 @@ def evaluate(image):
 
 	hidden = decoder.reset_state(batch_size = 1)
 
-	temp_input = tf.expand_dim(load_image(image)[0], 0)
+	temp_input = tf.expand_dims(load_image(image)[0], 0)
 	img_tensor_val = image_features_extract_model(temp_input)
 	img_tensor_val = tf.reshape(img_tensor_val, (img_tensor_val.shape[0], -1, img_tensor_val.shape[3]))
 
@@ -432,4 +433,9 @@ def plot_attention(image, result, attention_plot):
 #captions on validation set
 rid = np.random.randint(0, len(img_name_val))
 image = img_name_val[rid]
-real_caption = ' '.join([tokenizer.index_word])
+real_caption = ' '.join([tokenizer.index_word[i] for i in cap_val[rid] if i not in [0]])
+result, attention_plot = evaluate(image)
+
+print('Real Caption: ', real_caption)
+print('Prediction Caption: ', ' '.join(result))
+plot_attention(image, result, attention_plot)
