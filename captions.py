@@ -430,12 +430,25 @@ def plot_attention(image, result, attention_plot):
 	plt.tight_layout()
 	plt.show()
 
-#captions on validation set
-rid = np.random.randint(0, len(img_name_val))
-image = img_name_val[rid]
-real_caption = ' '.join([tokenizer.index_word[i] for i in cap_val[rid] if i not in [0]])
-result, attention_plot = evaluate(image)
+# #captions on validation set
+# rid = np.random.randint(0, len(img_name_val))
+# image = img_name_val[rid]
+# real_caption = ' '.join([tokenizer.index_word[i] for i in cap_val[rid] if i not in [0]])
+# result, attention_plot = evaluate(image)
 
-print('Real Caption: ', real_caption)
-print('Prediction Caption: ', ' '.join(result))
-plot_attention(image, result, attention_plot)
+# print('Real Caption: ', real_caption)
+# print('Prediction Caption: ', ' '.join(result))
+# plot_attention(image, result, attention_plot)
+
+# image_url = 'https://scontent-bos3-1.xx.fbcdn.net/v/t1.0-9/60958103_3272864512724532_7901350501503991808_n.jpg?_nc_cat=111&ccb=3&_nc_sid=09cbfe&_nc_ohc=4h-SIyun3jYAX_t9h5o&_nc_ht=scontent-bos3-1.xx&oh=7f5bb79946dc4807a135e537ceaa4faf&oe=6053B5EB'
+# image_extension = image_url[-4:]
+# image_path = tf.keras.utils.get_file('oren.jpg',
+#                                      image_url)
+image_path = 'C:\\Users\\Owner\\Dev\\tensor\\tensor\\images\\oren.jpg'
+print(image_path)
+
+result, attention_plot = evaluate(image_path)
+print ('Prediction Caption:', ' '.join(result))
+plot_attention(image_path, result, attention_plot)
+# opening the image
+Image.open(image_path)
