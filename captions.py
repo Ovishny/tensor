@@ -344,7 +344,7 @@ def train_step(img_tensor,target):
 			dec_input = tf.expand_dims(target[:, i], 1)
 
 	total_loss = (loss/int(target.shape[1]))
-	training_variables = encoder.trainable_variables + decoder.trainable_variables
+	trainable_variables = encoder.trainable_variables + decoder.trainable_variables
 	gradients = tape.gradient(loss, trainable_variables)
 	optimizer.apply_gradients(zip(gradients, trainable_variables))
 	return loss, total_loss
@@ -360,8 +360,8 @@ for epoch in range(start_epoch, EPOCHS):
 		total_loss += t_loss
 
 		if batch % 100 == 0:
-			print('Epoch {} Batch {} Loss {:.4f'.format(
-				epoch + 1, batch, batch_loss.numpt()/int(target.shape[1])))
+			print('Epoch {} Batch {} Loss {:.4f}'.format(
+				epoch + 1, batch, batch_loss.numpy()/int(target.shape[1])))
 	#storing epoch end loss value to plot
 	loss_plot.append(total_loss/num_steps)
 	if epoch % 5 == 0:
@@ -370,3 +370,9 @@ for epoch in range(start_epoch, EPOCHS):
 	print('Epoch {} Loss {:.6f}'.format(epoch + 1, total_loss/num_steps))
 	print('Time taken for 1 epoch {} sec\n'.format(time.time()-start))
 
+# #plot the lossfunction over epochs
+# plt.plot(loss_plot)
+# plt.xlabel('Epochs')
+# plt.ylabel('Loss')
+# plt.title('Loss Plot')
+# plt.show()
