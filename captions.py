@@ -444,7 +444,7 @@ def plot_attention(image, result, attention_plot):
 # image_extension = image_url[-4:]
 # image_path = tf.keras.utils.get_file('oren.jpg',
 #                                      image_url)
-image_path = 'C:\\Users\\Owner\\Dev\\tensor\\tensor\\images\\oren.jpg'
+image_path = 'C:\\Users\\Owner\\Dev\\tensor\\tensor\\images\\marg.jpg'
 print(image_path)
 
 result, attention_plot = evaluate(image_path)
